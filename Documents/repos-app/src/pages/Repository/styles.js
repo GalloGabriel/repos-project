@@ -79,7 +79,7 @@ export const IssuesList = styled.ul`
 
 
   h2{
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-weight: bold;
     font-size: 26px;
     color: #0D2636;
@@ -163,6 +163,25 @@ export const PageActions = styled.div`
       background-color: #fff;
       color: #fff;
       cursor: auto;
+    }
+  }
+`;
+
+export const FilterList = styled.div`
+  margin-bottom: 30px;
+
+  button{
+    outline: 0;
+    border: 0;
+    padding: 8px;
+    border-radius: 4px;
+    margin: 0 3px;
+
+
+    &:nth-child(${props => props.active + 1}){
+      background-color: #0071db;
+      color: #fff;
+      font-weight: bold;
     }
   }
 `;

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Container, Owner, Loading, BackButton, RepoInteractions, IssuesList, PageActions } from './styles';
+import { Container, Owner, Loading, BackButton, RepoInteractions, IssuesList, PageActions, FilterList } from './styles';
 import { FaArrowLeft, FaGithub } from 'react-icons/fa';
 import api from '../../services/api';
 
@@ -9,6 +9,12 @@ export default function Repository({match}){
   const [issues, setIssues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [filters, setFilters] = useState([
+    {state: 'all', label: 'Todas', active: true},
+    {state: 'open', label: 'Abertas', active: false},
+    {state: 'closed', label: 'Fechadas', active: false},
+  ]);
+  const [filterIndex, setFilterIndex] = useState(0);
 
   useEffect(()=>{
 
@@ -19,9 +25,9 @@ export default function Repository({match}){
       const [repoData, issuesData] = await Promise.all([
         api.get(`/repos/${nomeRepo}`),
         api.get(`/repos/${nomeRepo}/issues`, {
-          //limitando numero de issues e trazendo só issues abertas
+          //limitando numero de issues e trazendo todas as issues do filter
           params:{
-            state: 'open',
+            state: filters.find(f => f.active).state,
             per_page: 5
           }
         })
@@ -34,7 +40,7 @@ export default function Repository({match}){
 
     load();
 
-  }, [match.params.repos]);
+  }, [filters, match.params.repos]);
 
 
   useEffect(()=>{
@@ -44,7 +50,7 @@ export default function Repository({match}){
 
       const response = await api.get(`/repos/${nomeRepo}/issues`,{
         params:{
-          state: 'open',
+          state: filters[filterIndex].state,
           page,
           per_page: 5,
         },
@@ -55,10 +61,14 @@ export default function Repository({match}){
 
     loadIssue();
 
-  },[match.params.repos, page])
+  },[filterIndex, filters, match.params.repos, page])
 
   function handlePage(action){
     setPage(action === 'back' ? page - 1 : page + 1)
+  }
+
+  function handleFilter(index){
+    setFilterIndex(index);
   }
 
 
@@ -108,8 +118,22 @@ export default function Repository({match}){
           </a>
         </RepoInteractions>
 
+        
+
         <IssuesList>
           <h2>Issues:</h2>
+
+          <FilterList active={filterIndex}>
+            {filters.map((filter, index) => (
+              <button 
+              type="button" 
+              key={filter.label}
+              onClick={()=>handleFilter(index)} 
+              >
+                {filter.label}
+              </button>
+            ))}
+          </FilterList>
 
           {issues.map(issue => (
             <li key={String(issue.id)}>
@@ -119,6 +143,8 @@ export default function Repository({match}){
               <div>
                 <strong>
                   <a target="_blank" rel="noreferrer" href={issue.html_url}>{issue.title}</a>
+
+                  <span style={{ backgroundColor: "#09ab93" }}>{issue.state}</span>
 
                   <div>
                     {issue.labels.map(label => (

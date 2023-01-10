@@ -70,3 +70,77 @@ export const RepoInteractions = styled.div`
     
   }
 `;
+
+export const IssuesList = styled.ul`
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid #eee;
+  list-style: none;
+
+
+  h2{
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 26px;
+    color: #0D2636;
+  }
+
+  li{
+    display: flex;
+    padding: 15px 10px;
+
+    & + li{
+      margin-top: 12px;
+    }
+
+  }
+
+  img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #0D2636;
+  }
+
+  div{
+    flex: 1;
+    margin-left: 12px;
+
+
+    p{
+      font-size: 13px;
+      color: #000;
+      font-weight: bold;
+    }
+  }
+
+  strong{
+    font-size: 15px;
+
+    a{
+      text-decoration: none;
+      color: rgba(0, 113, 219, .9);
+      transition: 0.3s;
+
+      &:hover{
+        color: rgba(0, 113, 219, 1.5);
+        font-weight: bold;
+        text-decoration: underline;
+      }
+    }
+
+    div{
+      margin: 10px -10px;
+    }
+
+    span{
+      background: #0D2636;
+      color: #fff;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 7px;
+      margin-left: 10px;
+    }
+  }
+`;

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Container, Owner, Loading, BackButton, RepoInteractions } from './styles';
+import { Container, Owner, Loading, BackButton, RepoInteractions, IssuesList } from './styles';
 import { FaArrowLeft, FaGithub } from 'react-icons/fa';
 import api from '../../services/api';
 
@@ -64,23 +64,52 @@ export default function Repository({match}){
         </Owner> 
 
         <RepoInteractions>
-            <span> 
-              <a 
-              target="_blank" 
-              rel="noreferrer" 
-              href={repositorio.homepage}>
-                Saiba mais
-              </a> 
-            </span>
-
+          <span> 
             <a 
-              target="_blank"
-              rel="noreferrer"
-              title="Ver no Github"
-              href={repositorio.html_url}>
-                <FaGithub size={25}/>
-            </a>
+            target="_blank" 
+            rel="noreferrer" 
+            href={repositorio.homepage}>
+              Saiba mais
+            </a> 
+          </span>
+
+          <a 
+            target="_blank"
+            rel="noreferrer"
+            title="Ver no Github"
+            href={repositorio.html_url}>
+              <FaGithub size={25}/>
+          </a>
         </RepoInteractions>
+
+        <IssuesList>
+          <h2>Recent Issues:</h2>
+
+          {issues.map(issue => (
+            <li key={String(issue.id)}>
+
+              <img src={issue.user.avatar_url} alt={issue.user.login} />
+
+              <div>
+                <strong>
+                  <a target="_blank" rel="noreferrer" href={issue.html_url}>{issue.title}</a>
+
+                  <div>
+                    {issue.labels.map(label => (
+                      <span key={String(label.id)}>
+                        {label.name}
+                      </span>
+                    ))}
+                  </div>
+                </strong>
+
+                <p>{issue.user.login}</p>
+              </div>
+
+            </li>
+          ))}
+          
+        </IssuesList>
 
       </Container>
     </div>
